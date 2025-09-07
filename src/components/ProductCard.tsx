@@ -8,10 +8,10 @@ interface IProps {
 
 export const ProductCard = ({ product }: IProps) => {
 
-  const { description, imageURL, price, title } = product;
+  const { description, imageURL, price, title ,category} = product;
 
   return (
-    <div className="border rounded-md p-2 flex flex-col">
+    <div className=" max-w-sm md:max-w-lg mx-auto md:mx-0 border rounded-md p-2 flex flex-col">
       
       <Image imageSrc={imageURL} imageAlt="Product Name" imageClasses="rounded-md" />
       <h3>{title}</h3>
@@ -24,7 +24,7 @@ export const ProductCard = ({ product }: IProps) => {
 
       <div className="flex justify-between items-center mb-2">
         <span>${price}</span>
-        <Image imageSrc={imageURL} imageAlt="Product Name" imageClasses="w-10 h-10 rounded-full object-center" />
+        <Image imageSrc={category.imageURL} imageAlt={category.name} imageClasses="w-10 h-10 rounded-full object-center" />
       </div>
 
       <div className="flex justify-between space-x-2 items-center mt-5">
