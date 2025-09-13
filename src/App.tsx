@@ -5,6 +5,8 @@ import { formInputsList, productList } from "./data"
 import Button from "./components/UI/Button"
 import Input from "./components/UI/Input"
 import type { IProduct } from "./interfaces"
+import { productValidation } from "./validations"
+import ErrorsMsg from "./components/ErrorsMsg"
 
 function App() {
 
@@ -19,39 +21,65 @@ function App() {
       imageURL: ""
     }
   }
-  let [isOpen, setIsOpen] = useState(false)
 
-  let [product, setProduct] = useState<IProduct>(defaultProductObj)
 
- 
+  const [isOpen, setIsOpen] = useState(false)
+  const [product, setProduct] = useState<IProduct>(defaultProductObj)
+  const [errors, setErrors] = useState({
+    title: "",
+    price: "",
+    imageURL: "",
+    description: ""
+  })
+
+
 
   const open = () => setIsOpen(true)
   const close = () => setIsOpen(false)
 
-  const onChangeHandler = (evt: ChangeEvent<HTMLInputElement>) =>{
-    const {value, name} = evt.target;
+  const onChangeHandler = (evt: ChangeEvent<HTMLInputElement>) => {
+    const { value, name } = evt.target;
     setProduct({
       ...product,
-      [name]:value
+      [name]: value
+    })
+    
+    setErrors({
+      ...errors,
+      [name]:""
     })
   }
 
-  
-  const submitHandler = (event: FormEvent<HTMLFormElement>): void =>{
-    event.preventDefault();
-  }
-
-  const cancelHandler = ()=> {
+  const cancelHandler = () => {
     setProduct(defaultProductObj);
     close();
   }
 
- const renderedProductList = productList.map(prod => <ProductCard key={prod.id} product={prod} />)
+  const submitHandler = (event: FormEvent<HTMLFormElement>): void => {
+
+    event.preventDefault();
+
+    const { title, description, imageURL, price } = product
+    const errs = productValidation({ title, description, imageURL, price })
+
+    const hasErrorMsg = Object.values(errs).some(val => val === "") && Object.values(errs).every(val => val === "");
+
+    if (!hasErrorMsg){
+      setErrors(errs);
+      return;
+    }
+      
+    console.log("Will be Submitted");
+
+  }
+
+  const renderedProductList = productList.map(prod => <ProductCard key={prod.id} product={prod} />)
 
   const renderFormInputsList = formInputsList.map(ele =>
     <div className="flex flex-col" key={ele.id}>
       <label className="mb-2 font-medium text-sm text-gray-700" htmlFor={ele.id}>{ele.label}</label>
       <Input type={ele.type} name={ele.name} id={ele.id} value={product[ele.name]} onChange={onChangeHandler} />
+      <ErrorsMsg msg={errors[ele.name]}></ErrorsMsg>
     </div>
   )
 
