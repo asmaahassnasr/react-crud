@@ -1,4 +1,4 @@
-import { useState, type ChangeEvent } from "react"
+import { useState, type ChangeEvent, type FormEvent } from "react"
 import { ProductCard } from "./components/ProductCard"
 import Modal from "./components/UI/Modal"
 import { formInputsList, productList } from "./data"
@@ -8,9 +8,7 @@ import type { IProduct } from "./interfaces"
 
 function App() {
 
-  let [isOpen, setIsOpen] = useState(false)
-
-  let [product, setProduct] = useState<IProduct>({
+  const defaultProductObj = {
     title: "",
     price: "",
     imageURL: "",
@@ -20,7 +18,10 @@ function App() {
       name: "",
       imageURL: ""
     }
-  })
+  }
+  let [isOpen, setIsOpen] = useState(false)
+
+  let [product, setProduct] = useState<IProduct>(defaultProductObj)
 
  
 
@@ -35,6 +36,16 @@ function App() {
     })
   }
 
+  
+  const submitHandler = (event: FormEvent<HTMLFormElement>): void =>{
+    event.preventDefault();
+  }
+
+  const cancelHandler = ()=> {
+    setProduct(defaultProductObj);
+    close();
+  }
+
  const renderedProductList = productList.map(prod => <ProductCard key={prod.id} product={prod} />)
 
   const renderFormInputsList = formInputsList.map(ele =>
@@ -43,6 +54,7 @@ function App() {
       <Input type={ele.type} name={ele.name} id={ele.id} value={product[ele.name]} onChange={onChangeHandler} />
     </div>
   )
+
   return (
     <>
       <main className="container mx-auto">
@@ -54,11 +66,11 @@ function App() {
         </div>
 
         <Modal isOpen={isOpen} title="Add New Product" closeModal={close}>
-          <form className="space-y-3">
+          <form className="space-y-3" onSubmit={submitHandler}>
             {renderFormInputsList}
             <div className="flex items-center space-x-3">
               <Button className="bg-indigo-700 hover:bg-indigo-800">Submit</Button>
-              <Button className="bg-gray-500 hover:bg-gray-600" onClick={close}>Close</Button>
+              <Button className="bg-gray-500 hover:bg-gray-600" onClick={cancelHandler}>Close</Button>
             </div>
           </form>
         </Modal>
