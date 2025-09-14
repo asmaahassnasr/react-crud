@@ -8,6 +8,7 @@ import type { IProduct } from "./interfaces"
 import { productValidation } from "./validations"
 import ErrorsMsg from "./components/ErrorsMsg"
 import ColorsComponent from "./components/ColorsComponent"
+import { v4 as uuid } from "uuid";
 
 function App() {
 
@@ -25,6 +26,7 @@ function App() {
 
 
   const [isOpen, setIsOpen] = useState(false)
+  const [products, setProducts] = useState<IProduct[]>(productList)
   const [product, setProduct] = useState<IProduct>(defaultProductObj)
   const [errors, setErrors] = useState({
     title: "",
@@ -69,11 +71,14 @@ function App() {
       return;
     }
 
-    console.log("Will be Submitted");
+    setProducts(prev => [ {...product, id: uuid(), colors:tempColors} , ...prev]);
+    setProduct(defaultProductObj);
+    setTempColors([]);
+    close()
 
   }
 
-  const renderedProductList = productList.map(prod => <ProductCard key={prod.id} product={prod} />)
+  const renderedProductList = products.map(prod => <ProductCard key={prod.id} product={prod} />)
 
   const renderFormInputsList = formInputsList.map(ele =>
     <div className="flex flex-col" key={ele.id}>
@@ -88,7 +93,9 @@ function App() {
       setTempColors(prev => prev.filter(item => item !== clr));
       return;
     }
+
     setTempColors((prev) => [...prev, clr])
+
   }} />)
 
   return (
