@@ -1,12 +1,13 @@
 import { useState, type ChangeEvent, type FormEvent } from "react"
 import { ProductCard } from "./components/ProductCard"
 import Modal from "./components/UI/Modal"
-import { formInputsList, productList } from "./data"
+import { colors, formInputsList, productList } from "./data"
 import Button from "./components/UI/Button"
 import Input from "./components/UI/Input"
 import type { IProduct } from "./interfaces"
 import { productValidation } from "./validations"
 import ErrorsMsg from "./components/ErrorsMsg"
+import ColorsComponent from "./components/ColorsComponent"
 
 function App() {
 
@@ -31,8 +32,7 @@ function App() {
     imageURL: "",
     description: ""
   })
-
-
+  const [tempColors, setTempColors] = useState<string[]>([])
 
   const open = () => setIsOpen(true)
   const close = () => setIsOpen(false)
@@ -43,10 +43,10 @@ function App() {
       ...product,
       [name]: value
     })
-    
+
     setErrors({
       ...errors,
-      [name]:""
+      [name]: ""
     })
   }
 
@@ -64,11 +64,11 @@ function App() {
 
     const hasErrorMsg = Object.values(errs).some(val => val === "") && Object.values(errs).every(val => val === "");
 
-    if (!hasErrorMsg){
+    if (!hasErrorMsg) {
       setErrors(errs);
       return;
     }
-      
+
     console.log("Will be Submitted");
 
   }
@@ -83,11 +83,19 @@ function App() {
     </div>
   )
 
+  const renderColors = colors.map(clr => <ColorsComponent key={clr} color={clr} onClick={() => {
+    if (tempColors.includes(clr)) {
+      setTempColors(prev => prev.filter(item => item !== clr));
+      return;
+    }
+    setTempColors((prev) => [...prev, clr])
+  }} />)
+
   return (
     <>
       <main className="container mx-auto">
 
-        <Button className="bg-indigo-700 hover:bg-indigo-800" onClick={open}>Add Product</Button>
+        <Button className="bg-indigo-700 hover:bg-indigo-800 block mx-auto p-5 my-10 font-medium" width={"w-fit"} onClick={open}>Build Product</Button>
 
         <div className="m-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 md:gap-4 p-2">
           {renderedProductList}
@@ -96,6 +104,14 @@ function App() {
         <Modal isOpen={isOpen} title="Add New Product" closeModal={close}>
           <form className="space-y-3" onSubmit={submitHandler}>
             {renderFormInputsList}
+            <div className="flex flex-wrap items-center space-x-2 my-2 ">
+              {renderColors}
+            </div>
+            <div className="flex flex-wrap items-center space-x-2 my-2 ">
+              {tempColors.map(clr =>
+                <span key={clr} style={{ background: clr }} className="mr-1 p-1 mb-1 text-xs rounded-md text-white">{clr}</span>
+              )}
+            </div>
             <div className="flex items-center space-x-3">
               <Button className="bg-indigo-700 hover:bg-indigo-800">Submit</Button>
               <Button className="bg-gray-500 hover:bg-gray-600" onClick={cancelHandler}>Close</Button>
