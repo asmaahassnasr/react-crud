@@ -9,6 +9,7 @@ import { productValidation } from "./validations"
 import ErrorsMsg from "./components/ErrorsMsg"
 import ColorsComponent from "./components/ColorsComponent"
 import { v4 as uuid } from "uuid";
+import Select from "./components/UI/Select"
 
 function App() {
 
@@ -111,6 +112,7 @@ function App() {
         <Modal isOpen={isOpen} title="Add New Product" closeModal={close}>
           <form className="space-y-3" onSubmit={submitHandler}>
             {renderFormInputsList}
+            <Select />
             <div className="flex flex-wrap items-center space-x-2 my-2 ">
               {renderColors}
             </div>
