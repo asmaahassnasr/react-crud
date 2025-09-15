@@ -1,42 +1,45 @@
 import type { IProduct } from '../interfaces'
 import { Image } from './Image'
 import Button from './UI/Button'
-import {txtSlicer} from '../utils/fuctions'
+import { txtSlicer } from '../utils/fuctions'
 import ColorsComponent from './ColorsComponent'
 interface IProps {
   product: IProduct;
-  setProductToEdit : (product : IProduct) => void;
-  openEditModal:() =>void ;
-  idx:number;
-  setProductToEditIdx: (vlaue:number) =>void;
+  setProductToEdit: (product: IProduct) => void;
+  openEditModal: () => void;
+  idx: number;
+  setProductToEditIdx: (vlaue: number) => void;
 }
 
-export const ProductCard = ({ product ,setProductToEdit,openEditModal, idx , setProductToEditIdx}: IProps) => {
+export const ProductCard = ({ product, setProductToEdit, openEditModal, idx, setProductToEditIdx }: IProps) => {
 
-  const { description, imageURL, price, title ,category,colors} = product;
+  const { description, imageURL, price, title, category, colors } = product;
 
-   const renderColors = colors.map(clr => <ColorsComponent key={clr} color={clr} />)
+  const renderColors = colors.map(clr => <ColorsComponent key={clr} color={clr} />)
 
 
-   const onEdit = () => {
+  const onEdit = () => {
     setProductToEdit(product);
     openEditModal();
     setProductToEditIdx(idx);
-   }
-   
+  }
+
   return (
     <div className=" max-w-sm md:max-w-lg mx-auto md:mx-0 border rounded-md p-2 flex flex-col">
-      
-      <Image imageSrc={imageURL} imageAlt="Product image" imageClasses="h-44 rounded-md"/>
+
+      <Image imageSrc={imageURL} imageAlt="Product image" imageClasses="h-44 rounded-md" />
       <h3 className='text-xl font-medium mt-3'>{title}</h3>
       <p className='text-md mt-3 font-medium'> {txtSlicer(description)} </p>
       <div className="flex flex-wrap items-center space-x-2 my-3 ">
-              {renderColors}
+        {renderColors}
       </div>
 
       <div className="flex justify-between items-center mb-2">
-        <span>${price}</span>
-        <Image imageSrc={category.imageURL} imageAlt={category.name} imageClasses="w-10 h-10 rounded-full object-center" />
+          <span className='font-bold text-indigo-500'>${Number(price).toLocaleString()} </span>
+        <div className='flex items-center'> 
+          <span className='mx-2 font-medium'>{category.name}</span>
+          <Image imageSrc={category.imageURL} imageAlt={category.name} imageClasses="w-10 h-10 rounded-full object-center" />
+        </div>
       </div>
 
       <div className="flex justify-between space-x-2 items-center mt-5">

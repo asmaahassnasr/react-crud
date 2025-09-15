@@ -193,7 +193,7 @@ function App() {
             </div>
             <div className="flex items-center space-x-3">
               <Button className="bg-indigo-700 hover:bg-indigo-800">Submit</Button>
-              <Button className="bg-gray-500 hover:bg-gray-600" onClick={cancelHandler}>Close</Button>
+              <Button className="bg-gray-200 hover:bg-gray-300 !text-black" onClick={cancelHandler}>Close</Button>
             </div>
           </form>
         </Modal>
@@ -218,7 +218,7 @@ function App() {
             </div>
             <div className="flex items-center space-x-3">
               <Button className="bg-indigo-700 hover:bg-indigo-800">Submit</Button>
-              <Button className="bg-gray-500 hover:bg-gray-600" onClick={cancelEditHandler}>Close</Button>
+              <Button className="bg-gray-200 hover:bg-gray-300 !text-black" onClick={cancelEditHandler}>Close</Button>
             </div>
           </form>
         </Modal>
