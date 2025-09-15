@@ -1,4 +1,4 @@
-import {Description, Dialog, DialogDescription, DialogPanel, DialogTitle } from '@headlessui/react'
+import {Description, Dialog, DialogPanel, DialogTitle } from '@headlessui/react'
 import {type ReactNode } from 'react'
 
 interface IProps{

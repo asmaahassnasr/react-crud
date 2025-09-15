@@ -11,6 +11,7 @@ import ColorsComponent from "./components/ColorsComponent"
 import { v4 as uuid } from "uuid";
 import Select from "./components/UI/Select"
 import type { ProductNameTypes } from "./types"
+import toast, { Toaster } from "react-hot-toast"
 
 function App() {
 
@@ -42,6 +43,19 @@ function App() {
   })
   const [tempColors, setTempColors] = useState<string[]>([])
   const [selectedCategory, setSelectedCategory] = useState(categories[1])
+
+  
+
+  const toastMsg = (msg:string) =>{
+    toast.success(msg,{
+    icon: '👏',
+    style: {
+      borderRadius: '10px',
+      background: '#333',
+      color: '#fff',
+    },
+  })
+  }
 
   const open = () => setIsOpen(true)
   const close = () => setIsOpen(false)
@@ -107,7 +121,8 @@ function App() {
     setProducts(prev => [{ ...product, id: uuid(), colors: tempColors, category: selectedCategory }, ...prev]);
     setProduct(defaultProductObj);
     setTempColors([]);
-    close()
+    close();
+    toastMsg("Successfully Added New Product");
 
   }
 
@@ -131,7 +146,8 @@ function App() {
 
     setProductToEdit(defaultProductObj);
     setTempColors([]);
-    closeEditModal()
+    closeEditModal();
+    toastMsg("Successfully Updated")
 
   }
 
@@ -139,6 +155,8 @@ function App() {
     const filtered = products.filter(prod => prod.id !== productToEdit.id)
     setProducts(filtered);
     closeRemoveModal();
+    toastMsg("Successfully Deleted ");
+    
   }
 
   const renderedProductList = products.map((prod, idx) => <ProductCard
@@ -252,6 +270,7 @@ function App() {
           </div>
         </Modal>
 
+        <Toaster position="bottom-right" reverseOrder={false}/>
       </main>
     </>
   )
