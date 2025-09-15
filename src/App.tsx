@@ -28,6 +28,7 @@ function App() {
 
 
   const [isOpenEditModal, setIsOpenEditModal] = useState(false)
+  const [isOpenRemoveModal, setIsOpenRemoveModal] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
   const [products, setProducts] = useState<IProduct[]>(productList)
   const [productToEdit, setProductToEdit] = useState<IProduct>(defaultProductObj)
@@ -47,6 +48,9 @@ function App() {
 
   const openEditModal = () => setIsOpenEditModal(true)
   const closeEditModal = () => setIsOpenEditModal(false)
+
+  const openRemoveModal = () => setIsOpenRemoveModal(true)
+  const closeRemoveModal = () => setIsOpenRemoveModal(false)
 
   const onChangeHandler = (evt: ChangeEvent<HTMLInputElement>) => {
     const { value, name } = evt.target;
@@ -80,6 +84,10 @@ function App() {
   }
   const cancelEditHandler = () => {
     closeEditModal();
+  }
+
+  const cancelRemoveHandler = () => {
+    closeRemoveModal();
   }
 
   const submitHandler = (event: FormEvent<HTMLFormElement>): void => {
@@ -118,7 +126,7 @@ function App() {
     }
 
     const updatedProducts = [...products];
-    updatedProducts[productToEditIdx] = {...productToEdit, colors:tempColors.concat(productToEdit.colors)};
+    updatedProducts[productToEditIdx] = { ...productToEdit, colors: tempColors.concat(productToEdit.colors) };
     setProducts(updatedProducts);
 
     setProductToEdit(defaultProductObj);
@@ -127,13 +135,21 @@ function App() {
 
   }
 
+  const submitRemoveProduct = () => {
+    const filtered = products.filter(prod => prod.id !== productToEdit.id)
+    setProducts(filtered);
+    closeRemoveModal();
+  }
+
   const renderedProductList = products.map((prod, idx) => <ProductCard
     key={prod.id}
     product={prod}
     setProductToEdit={setProductToEdit}
     idx={idx}
     setProductToEditIdx={setProductToEditIdx}
-    openEditModal={openEditModal} />)
+    openEditModal={openEditModal}
+    openRemoveModal={openRemoveModal}
+  />)
 
   const renderFormInputsList = formInputsList.map(ele =>
     <div className="flex flex-col" key={ele.id}>
@@ -206,8 +222,8 @@ function App() {
             {renderEditableProductWithErrorsMsg("imageURL", "imageURL", "Product Image URL ")}
             {renderEditableProductWithErrorsMsg("price", "price", "Product Price ")}
 
-            <Select selected={productToEdit.category} setSelected={(value) => setProductToEdit({...productToEdit, category:value})} />
-              
+            <Select selected={productToEdit.category} setSelected={(value) => setProductToEdit({ ...productToEdit, category: value })} />
+
             <div className="flex flex-wrap items-center space-x-2 mt-5 ">
               {renderColors}
             </div>
@@ -223,6 +239,18 @@ function App() {
           </form>
         </Modal>
 
+        {/* ----------------------------------- Remove PRoduct Modal  */}
+        <Modal
+          isOpen={isOpenRemoveModal}
+          title="Are you sure to remove this product from your store ?"
+          description="Deleting this product will remove it permentaly from your inventory, an associated data, sales history, and other related data will also be deleted. Please make sure this is the intended action"
+          closeModal={closeRemoveModal}
+        >
+          <div className="flex items-center space-x-3">
+            <Button className="bg-red-800 hover:bg-red-900" onClick={submitRemoveProduct}>Yes, Remove</Button>
+            <Button className="bg-gray-200 hover:bg-gray-300 !text-black" onClick={cancelRemoveHandler}>Cancel</Button>
+          </div>
+        </Modal>
 
       </main>
     </>
