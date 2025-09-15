@@ -4,23 +4,33 @@ import Button from './UI/Button'
 import {txtSlicer} from '../utils/fuctions'
 import ColorsComponent from './ColorsComponent'
 interface IProps {
-  product: IProduct
+  product: IProduct;
+  setProductToEdit : (product : IProduct) => void;
+  openEditModal:() =>void ;
+  idx:number;
+  setProductToEditIdx: (vlaue:number) =>void;
 }
 
-export const ProductCard = ({ product }: IProps) => {
+export const ProductCard = ({ product ,setProductToEdit,openEditModal, idx , setProductToEditIdx}: IProps) => {
 
   const { description, imageURL, price, title ,category,colors} = product;
 
    const renderColors = colors.map(clr => <ColorsComponent key={clr} color={clr} />)
 
 
+   const onEdit = () => {
+    setProductToEdit(product);
+    openEditModal();
+    setProductToEditIdx(idx);
+   }
+   
   return (
     <div className=" max-w-sm md:max-w-lg mx-auto md:mx-0 border rounded-md p-2 flex flex-col">
       
       <Image imageSrc={imageURL} imageAlt="Product image" imageClasses="h-44 rounded-md"/>
-      <h3>{title}</h3>
-      <p> {txtSlicer(description)} </p>
-      <div className="flex flex-wrap items-center space-x-2 my-2 ">
+      <h3 className='text-xl font-medium mt-3'>{title}</h3>
+      <p className='text-md mt-3 font-medium'> {txtSlicer(description)} </p>
+      <div className="flex flex-wrap items-center space-x-2 my-3 ">
               {renderColors}
       </div>
 
@@ -30,7 +40,7 @@ export const ProductCard = ({ product }: IProps) => {
       </div>
 
       <div className="flex justify-between space-x-2 items-center mt-5">
-        <Button className='bg-indigo-700' >Edit</Button>
+        <Button className='bg-indigo-700' onClick={onEdit}>Edit</Button>
         <Button className='bg-red-700' >delete</Button>
       </div>
     </div>
