@@ -66,18 +66,11 @@ function App() {
   const openRemoveModal = useCallback(() => setIsOpenRemoveModal(true), [])
   const closeRemoveModal = () => setIsOpenRemoveModal(false)
 
-  const onChangeHandler = (evt: ChangeEvent<HTMLInputElement>) => {
+  const onChangeHandler = useCallback((evt: ChangeEvent<HTMLInputElement>) => {
     const { value, name } = evt.target;
-    setProduct({
-      ...product,
-      [name]: value
-    })
-
-    setErrors({
-      ...errors,
-      [name]: ""
-    })
-  }
+    setProduct(prev => ({...prev, [name]:value}))
+    setErrors(prev => ({...prev, [name]:""}))
+  }, [])
 
   const onChangeEditHandler = (evt: ChangeEvent<HTMLInputElement>) => {
     const { value, name } = evt.target;
