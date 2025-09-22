@@ -1,4 +1,4 @@
-import type { InputHTMLAttributes } from "react"
+import { memo, type InputHTMLAttributes } from "react"
 
 interface IProps extends InputHTMLAttributes<HTMLInputElement> { }
 
@@ -10,4 +10,4 @@ const Input = ({ ...rest }: IProps) => {
   )
 }
 
-export default Input
+export default memo(Input)
