@@ -3,6 +3,7 @@ import { Image } from './Image'
 import Button from './UI/Button'
 import { txtSlicer } from '../utils/fuctions'
 import ColorsComponent from './ColorsComponent'
+import { memo } from 'react'
 interface IProps {
   product: IProduct;
   setProductToEdit: (product: IProduct) => void;
@@ -12,7 +13,7 @@ interface IProps {
   openRemoveModal: () => void;
 }
 
-export const ProductCard = ({ product, setProductToEdit, openEditModal,openRemoveModal, idx, setProductToEditIdx }: IProps) => {
+const ProductCard = ({ product, setProductToEdit, openEditModal,openRemoveModal, idx, setProductToEditIdx }: IProps) => {
 
   const { description, imageURL, price, title, category, colors } = product;
 
@@ -54,3 +55,5 @@ export const ProductCard = ({ product, setProductToEdit, openEditModal,openRemov
     </div>
   )
 }
+
+export default memo(ProductCard);

@@ -1,5 +1,5 @@
-import { useState, type ChangeEvent, type FormEvent } from "react"
-import { ProductCard } from "./components/ProductCard"
+import { useCallback, useState, type ChangeEvent, type FormEvent } from "react"
+import  ProductCard  from "./components/ProductCard"
 import Modal from "./components/UI/Modal"
 import { categories, colors, formInputsList, productList } from "./data"
 import Button from "./components/UI/Button"
@@ -60,10 +60,10 @@ function App() {
   const open = () => setIsOpen(true)
   const close = () => setIsOpen(false)
 
-  const openEditModal = () => setIsOpenEditModal(true)
+  const openEditModal = useCallback(() => setIsOpenEditModal(true), [])
   const closeEditModal = () => setIsOpenEditModal(false)
 
-  const openRemoveModal = () => setIsOpenRemoveModal(true)
+  const openRemoveModal = useCallback(() => setIsOpenRemoveModal(true), [])
   const closeRemoveModal = () => setIsOpenRemoveModal(false)
 
   const onChangeHandler = (evt: ChangeEvent<HTMLInputElement>) => {
